@@ -1,20 +1,8 @@
 [
     {
-        "OriginalPrice_col": 69.95,
-        "ProductID_col": "5a2ac4d2-4184-f011-b4cb-000d3a3b4c7e",
-        "ProductName_col": "BUTTER BASTED BAKING BROILER - XL (HD)",
-        "SpecialPrice_col": 25
-    },
-    {
-        "OriginalPrice_col": 14.85,
-        "ProductID_col": "5b2ac4d2-4184-f011-b4cb-000d3a3b4c7e",
-        "ProductName_col": "CALYPSO PAK  (TP)",
-        "SpecialPrice_col": 25
-    },
-    {
-        "OriginalPrice_col": 32.74,
-        "ProductID_col": "5c2ac4d2-4184-f011-b4cb-000d3a3b4c7e",
-        "ProductName_col": "CALYPSO PAK (KG)",
-        "SpecialPrice_col": 25
+        "OriginalPrice_col": 45.52,
+        "ProductID_col": "612ac4d2-4184-f011-b4cb-000d3a3b4c7e",
+        "ProductName_col": "DRUMSTICKS Valu Pak (KG)",
+        "SpecialPrice_col": 10
     }
 ]
