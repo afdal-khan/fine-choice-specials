@@ -3,18 +3,24 @@
         "OriginalPrice_col": 69.95,
         "ProductID_col": "5a2ac4d2-4184-f011-b4cb-000d3a3b4c7e",
         "ProductName_col": "BUTTER BASTED BAKING BROILER - XL (HD)",
-        "SpecialPrice_col": 30
+        "SpecialPrice_col": 55
     },
     {
         "OriginalPrice_col": 45.52,
         "ProductID_col": "5e2ac4d2-4184-f011-b4cb-000d3a3b4c7e",
         "ProductName_col": "DRUMSTICKS (KG)",
-        "SpecialPrice_col": 30
+        "SpecialPrice_col": 39.99
     },
     {
         "OriginalPrice_col": 45.52,
         "ProductID_col": "612ac4d2-4184-f011-b4cb-000d3a3b4c7e",
         "ProductName_col": "DRUMSTICKS Valu Pak (KG)",
-        "SpecialPrice_col": 30
+        "SpecialPrice_col": 35
+    },
+    {
+        "OriginalPrice_col": 19.73,
+        "ProductID_col": "ea87bcd8-4184-f011-b4cb-000d3a3b4c7e",
+        "ProductName_col": "HEART & LIVER (KG)",
+        "SpecialPrice_col": 11.99
     }
 ]
