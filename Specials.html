@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly Specials</title>
+    <style>
+        /* --- Basic Styling --- */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        /* --- Header Styling --- */
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #dee2e6;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            font-size: 2em;
+            font-weight: 600;
+            color: #c00; /* Red color */
+        }
+        .header p {
+            font-size: 1.2em;
+            color: #6c757d;
+        }
+        /* --- Product Card Styling --- */
+        .product-card {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: #ffffff;
+            border: 1px solid #e9ecef;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+        .product-image {
+            flex: 0 0 150px;
+            margin-right: 20px;
+        }
+        .product-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        .product-details {
+            flex: 1;
+            min-width: 250px;
+        }
+        .product-details h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.4em;
+            font-weight: 600;
+        }
+        .price-container {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+        .old-price {
+            text-decoration: line-through;
+            color: #adb5bd;
+            font-size: 1.1em;
+        }
+        .new-price {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #dc3545;
+        }
+        .quantity-input label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        .quantity-input input {
+            width: 100px;
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+        }
+        /* --- Form Submission Styling --- */
+        .submission-section {
+            text-align: center;
+            margin-top: 40px;
+        }
+        .submission-section button {
+            background-color: #c00; /* Red color */
+            color: white;
+            font-weight: bold;
+            padding: 16px 48px;
+            border-radius: 8px;
+            border: none;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .submission-section button:hover {
+            background-color: #a00;
+        }
+        /* --- Loading and Error Styling --- */
+        #loadingMessage, #errorMessage {
+            text-align: center;
+            font-size: 1.2em;
+            padding: 40px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>Fine Choice Meats</h1>
+            <p id="campaignSubtitle">Weekly Specials</p>
+        </div>
+
+        <!-- This is where the product list will be dynamically inserted by JavaScript -->
+        <form id="orderForm">
+            <div id="productList">
+                <!-- Loading message will show initially -->
+                <p id="loadingMessage">Loading specials...</p>
+                <p id="errorMessage" style="display: none; color: red;"></p>
+            </div>
+
+            <div class="submission-section">
+                <button type="submit">Submit Order</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // --- THIS IS THE JAVASCRIPT THAT BRINGS THE PAGE TO LIFE ---
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // ** CRITICAL STEP **
+            // This URL MUST point to the specific campaign file.
+            const sharepointFileURL = 'https://wgml.sharepoint.com/sites/Testsite/_api/web/GetFileByServerRelativeUrl(\'/sites/Testsite/Shared Documents/Sales Campaign/campaign-2025-09-10T14_03_40.8038520Z.json\')/$value';
+
+            fetchProducts(sharepointFileURL);
+        });
+
+        // Function to fetch the JSON data from SharePoint
+        async function fetchProducts(url) {
+            try {
+                const response = await fetch(url);
+
+                if (!response.ok) {
+                    throw new Error(`Error fetching data: ${response.statusText}`);
+                }
+
+                const products = await response.json();
+                displayProducts(products);
+
+            } catch (error) {
+                console.error('Failed to load campaign data:', error);
+                document.getElementById('loadingMessage').style.display = 'none';
+                document.getElementById('errorMessage').innerText = 'Could not load specials. Please try again later.';
+                document.getElementById('errorMessage').style.display = 'block';
+            }
+        }
+
+        // Function to take the product data and build the HTML on the page
+        function displayProducts(products) {
+            const productListDiv = document.getElementById('productList');
+            document.getElementById('loadingMessage').style.display = 'none'; // Hide loading message
+            let productHTML = '';
+
+            products.forEach(product => {
+                productHTML += `
+                    <div class="product-card">
+                        <div class="product-image">
+                            <img src="https://placehold.co/150x150/f87171/ffffff?text=Product" alt="${product.ProductName_col}">
+                        </div>
+                        <div class="product-details">
+                            <h3>${product.ProductName_col}</h3>
+                            <div class="price-container">
+                                <span class="old-price">$${parseFloat(product.OriginalPrice_col).toFixed(2)}</span>
+                                <span class="new-price">$${parseFloat(product.SpecialPrice_col).toFixed(2)}</span>
+                            </div>
+                            <div class="quantity-input">
+                                <label for="qty-${product.ProductID_col}">Quantity (cases)</label>
+                                <input type="number" id="qty-${product.ProductID_col}" name="${product.ProductName_col}" min="0" placeholder="e.g., 10">
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            productListDiv.innerHTML = productHTML;
+        }
+
+        // Function to handle the form submission
+        document.getElementById('orderForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from actually submitting
+            
+            const formData = new FormData(event.target);
+            let emailBody = 'New Web Order Submission:\n\n';
+            let hasItems = false;
+
+            for (let [name, value] of formData.entries()) {
+                if (value && parseInt(value) > 0) {
+                    emailBody += `${name}: ${value} cases\n`;
+                    hasItems = true;
+                }
+            }
+
+            if (hasItems) {
+                // In a real scenario, this would send an email. For this demo, we will show an alert.
+                alert('Order Submitted!\n\n' + emailBody + '\nA sales rep will contact you shortly.');
+                event.target.reset(); // Clear the form
+            } else {
+                alert('Please enter a quantity for at least one item.');
+            }
+        });
+    </script>
+</body>
+</html>
+
