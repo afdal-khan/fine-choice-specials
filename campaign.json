@@ -1,26 +1,8 @@
 [
     {
-        "OriginalPrice_col": 24.5,
-        "ProductID_col": "42ca4410-ef63-f011-bec3-000d3a36c148",
-        "ProductName_col": "WHOLE LEGS  (TP)",
-        "SpecialPrice_col": 0
-    },
-    {
-        "OriginalPrice_col": 33.62,
-        "ProductID_col": "f787bcd8-4184-f011-b4cb-000d3a3b4c7e",
-        "ProductName_col": "RF BIG 1/8 (KG)",
-        "SpecialPrice_col": 0
-    },
-    {
-        "OriginalPrice_col": 45.88,
-        "ProductID_col": "fc87bcd8-4184-f011-b4cb-000d3a3b4c7e",
-        "ProductName_col": "RF BIG Whole ROTISSERIE CHK   (KG)",
-        "SpecialPrice_col": 0
-    },
-    {
-        "OriginalPrice_col": 42.07,
-        "ProductID_col": "fd87bcd8-4184-f011-b4cb-000d3a3b4c7e",
-        "ProductName_col": "RF CUT UP 1/8 Valu Pak (KG)",
+        "OriginalPrice_col": 44.5,
+        "ProductID_col": "f687bcd8-4184-f011-b4cb-000d3a3b4c7e",
+        "ProductName_col": "RF BIG 1/4 (HD) Printed Bag",
         "SpecialPrice_col": 0
     }
 ]
