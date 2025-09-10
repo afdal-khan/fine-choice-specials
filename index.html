@@ -146,13 +146,13 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             // ** CRITICAL STEP **
-            // This URL MUST point to the specific campaign file.
-            const sharepointFileURL = 'campaign.json';
+            // We add a unique timestamp to the end of the URL to prevent the browser from caching the old file.
+            const campaignFileURL = 'campaign.json?v=' + new Date().getTime();
 
-            fetchProducts(sharepointFileURL);
+            fetchProducts(campaignFileURL);
         });
 
-        // Function to fetch the JSON data from SharePoint
+        // Function to fetch the JSON data from the server
         async function fetchProducts(url) {
             try {
                 const response = await fetch(url);
@@ -228,5 +228,6 @@
     </script>
 </body>
 </html>
+
 
 
