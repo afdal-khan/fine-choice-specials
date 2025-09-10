@@ -1,20 +1,14 @@
 [
     {
-        "OriginalPrice_col": 44.5,
-        "ProductID_col": "f687bcd8-4184-f011-b4cb-000d3a3b4c7e",
-        "ProductName_col": "RF BIG 1/4 (HD) Printed Bag",
-        "SpecialPrice_col": 0
+        "OriginalPrice_col": 51.81,
+        "ProductID_col": "4b2ac4d2-4184-f011-b4cb-000d3a3b4c7e",
+        "ProductName_col": "BREAST 1/2 Valu Pak (KG)",
+        "SpecialPrice_col": 12.55
     },
     {
-        "OriginalPrice_col": 33.62,
-        "ProductID_col": "f787bcd8-4184-f011-b4cb-000d3a3b4c7e",
-        "ProductName_col": "RF BIG 1/8 (KG)",
-        "SpecialPrice_col": 0
-    },
-    {
-        "OriginalPrice_col": 34.49,
-        "ProductID_col": "f887bcd8-4184-f011-b4cb-000d3a3b4c7e",
-        "ProductName_col": "RF BIG 1/9 (KG)",
-        "SpecialPrice_col": 0
+        "OriginalPrice_col": 77.75,
+        "ProductID_col": "4c2ac4d2-4184-f011-b4cb-000d3a3b4c7e",
+        "ProductName_col": "BREAST 1/2 Valu Pak(TP)",
+        "SpecialPrice_col": 12.55
     }
 ]
