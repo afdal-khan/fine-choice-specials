@@ -134,7 +134,7 @@
 
     <div class="header">
         <img src="FCMLogo.png" alt="Fine Choice Meats Logo">
-        <h1>Weekly Specials</h1>
+        <h1>Weekly Specials Final</h1>
     </div>
 
     <div class="container">
@@ -153,8 +153,9 @@
         </div>
     </div>
 
- <script>
-        // --- FINAL, ROBUST JAVASCRIPT LOGIC (v3) ---
+
+    <script>
+        // --- FINAL, ROBUST JAVASCRIPT LOGIC (v4 - Direct Listeners) ---
         
         let loadedProducts = []; // This will hold the clean product data from the server
         let cart = []; // This array will hold the items in the order
@@ -212,15 +213,16 @@
             addAddToCartListeners(); // Call this AFTER the products are on the page
         }
 
+        // THIS IS THE NEW, MORE ROBUST FUNCTION
         function addAddToCartListeners() {
-            const productListDiv = document.getElementById('productList');
+            // Find all the "Add to Order" buttons that now exist on the page
+            const buttons = document.querySelectorAll('.addToCartBtn');
             
-            productListDiv.addEventListener('click', function(event) {
-                const button = event.target.closest('.addToCartBtn');
-                if (button) {
-                    const id = button.dataset.productId;
+            // Loop through each button and give it its own personal click listener
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const id = this.dataset.productId; // 'this' refers to the button that was clicked
                     
-                    // Look up the full product details from our clean global array
                     const product = loadedProducts.find(p => p.ProductID_col === id);
                     
                     if (!product) {
@@ -241,7 +243,7 @@
                     
                     addToCart(id, name, price, quantity);
                     quantityInput.value = '';
-                }
+                });
             });
         }
 
@@ -303,6 +305,7 @@
     </script>
 </body>
 </html>
+
 
 
 
