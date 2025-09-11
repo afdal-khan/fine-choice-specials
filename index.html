@@ -13,9 +13,12 @@
             color: #172b4d;
         }
         .container {
-            max-width: 900px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
         }
         .header {
             width: 100%;
@@ -33,6 +36,21 @@
             font-weight: 600;
             color: #42526e;
             margin: 0;
+        }
+        .products-section {
+            flex: 2;
+            min-width: 300px;
+        }
+        .order-summary-section {
+            flex: 1;
+            min-width: 300px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            align-self: flex-start;
+            position: sticky;
+            top: 20px;
         }
         .product-card {
             display: flex;
@@ -60,46 +78,72 @@
         .price-container { display: flex; align-items: baseline; gap: 8px; }
         .old-price { text-decoration: line-through; color: #7a869a; }
         .new-price { font-weight: 600; color: #de350b; }
-        .quantity-input {
-            margin-left: auto;
-            text-align: right;
+        .product-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
         }
-        .quantity-input label {
-            display: block;
-            font-size: 0.9em;
-            margin-bottom: 5px;
-            color: #6c757d;
-        }
-        .quantity-input input {
-            width: 80px;
+        .product-actions input {
+            width: 60px;
             padding: 8px;
             border-radius: 4px;
             border: 1px solid #dfe1e6;
             text-align: center;
-            font-size: 1.1em;
         }
-        .submit-container {
-            text-align: center;
-            margin-top: 40px;
-            padding: 20px;
-            background-color: #ffffff;
-            border-radius: 8px;
+        .product-actions button {
+            background-color: #0052cc;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .order-summary-section h2 {
+            margin-top: 0;
+            border-bottom: 1px solid #dfe1e6;
+            padding-bottom: 10px;
+        }
+        #cartItems { list-style-type: none; padding: 0; margin: 0; }
+        #cartItems li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #f4f5f7;
+        }
+        .cart-item-details { flex-grow: 1; }
+        .cart-item-details .item-name { font-weight: 500; }
+        .cart-item-details .item-price { font-size: 0.9em; color: #505f79; }
+        .remove-item-btn {
+            background: none;
+            border: none;
+            color: #de350b;
+            cursor: pointer;
+            font-size: 1.5em;
+            padding: 5px;
+            line-height: 1;
+        }
+        #cartTotal {
+            margin-top: 20px;
+            text-align: right;
+            font-size: 1.2em;
+            font-weight: bold;
         }
         #submitOrderBtn {
             width: 100%;
-            max-width: 400px;
             background-color: #0065ff;
             color: white;
             font-weight: bold;
             padding: 15px;
             border-radius: 6px;
             border: none;
-            font-size: 1.2em;
+            font-size: 1.1em;
             cursor: pointer;
+            margin-top: 20px;
         }
         #loadingMessage, #errorMessage { text-align: center; padding: 40px; }
-        .test-section { padding: 10px; background: #fff3cd; border: 1px solid #ffeeba; margin-bottom: 20px; text-align: center; }
-        .test-section button { margin: 5px; }
     </style>
 </head>
 <body>
@@ -110,29 +154,33 @@
     </div>
 
     <div class="container">
-        
-        <!-- TEMPORARY TEST SECTION - DELETE THIS ENTIRE DIV AFTER CONFIRMING CART WORKS -->
-        <div class="test-section">
-            <p><strong>Test Buttons (Remove this section later)</strong></p>
-            <button onclick="testAddToCart('test1', 'Test Product A', 10.00, 1)">Add Test A</button>
-            <button onclick="testAddToCart('test2', 'Test Product B (with special chars)', 20.00, 2)">Add Test B</button>
-            <button onclick="testAddToCart('test3', 'Test Product C 1/2', 30.00, 3)">Add Test C</button>
-        </div>
-
-        <div id="productList">
+        <div class="products-section" id="productList">
             <p id="loadingMessage">Loading specials...</p>
             <p id="errorMessage" style="display: none; color: red;"></p>
         </div>
 
-        <div class="submit-container">
+        <div class="order-summary-section">
+            <h2>Your Order</h2>
+            <ul id="cartItems">
+                <li id="emptyCartMsg">Your order is empty.</li>
+            </ul>
+            <div id="cartTotal">Total: $0.00</div>
             <button id="submitOrderBtn">Submit Order</button>
         </div>
     </div>
 
     <script>
-        // --- FINAL, ROBUST JAVASCRIPT LOGIC (v13 - Simplified Order Sheet) ---
+        // --- DEFINITIVE, ROBUST JAVASCRIPT LOGIC (v14) ---
         
         let loadedProducts = []; 
+        let cart = [];
+
+        // Helper function to sanitize text to prevent HTML issues
+        function escapeHTML(str) {
+            const p = document.createElement('p');
+            p.textContent = str;
+            return p.innerHTML;
+        }
 
         document.addEventListener('DOMContentLoaded', function() {
             const campaignFileURL = 'campaign.json?v=' + new Date().getTime();
@@ -161,73 +209,111 @@
             let productHTML = '';
 
             products.forEach(product => {
+                const safeProductName = escapeHTML(product.ProductName_col);
+
                 productHTML += `
                     <div class="product-card">
                         <div class="product-image">
-                            <img src="https://placehold.co/80x80/f87171/ffffff?text=Chicken" alt="${product.ProductName_col}">
+                            <img src="https://placehold.co/80x80/f87171/ffffff?text=Chicken" alt="${safeProductName}">
                         </div>
                         <div class="product-details">
-                            <h3>${product.ProductName_col}</h3>
+                            <h3>${safeProductName}</h3>
                             <div class="price-container">
                                 <span class="old-price">$${parseFloat(product.OriginalPrice_col).toFixed(2)}</span>
                                 <span class="new-price">$${parseFloat(product.SpecialPrice_col).toFixed(2)} / case</span>
                             </div>
-                        </div>
-                        <div class="quantity-input">
-                            <label for="qty-${product.ProductID_col}">Quantity</label>
-                            <input type="number" class="product-quantity-input" data-product-id="${product.ProductID_col}" min="0" placeholder="0">
+                            <div class="product-actions">
+                                <input type="number" id="qty-${product.ProductID_col}" min="1" placeholder="Qty">
+                                <button onclick="handleAddToCart('${product.ProductID_col}')">
+                                    + Add to Order
+                                </button>
+                            </div>
                         </div>
                     </div>
                 `;
             });
             productListDiv.innerHTML = productHTML;
         }
-        
+
+        function handleAddToCart(productId) {
+            const product = loadedProducts.find(p => p.ProductID_col === productId);
+            if (!product) return;
+
+            const quantityInput = document.getElementById(`qty-${productId}`);
+            const quantity = parseInt(quantityInput.value);
+
+            if (isNaN(quantity) || quantity <= 0) {
+                alert('Please enter a valid quantity.');
+                return;
+            }
+            
+            addToCart(product.ProductID_col, product.ProductName_col, parseFloat(product.SpecialPrice_col), quantity);
+            quantityInput.value = ''; // Clear input after adding
+        }
+
+        function handleRemoveFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            renderCart();
+        }
+
         function submitOrderHandler() {
-            const orderItems = [];
-            const quantityInputs = document.querySelectorAll('.product-quantity-input');
-
-            quantityInputs.forEach(input => {
-                const quantity = parseInt(input.value);
-                if (!isNaN(quantity) && quantity > 0) {
-                    const id = input.dataset.productId;
-                    const product = loadedProducts.find(p => p.ProductID_col === id);
-                    if (product) {
-                        orderItems.push({
-                            name: product.ProductName_col,
-                            quantity: quantity
-                        });
-                    }
-                }
-            });
-
-            if (orderItems.length === 0) {
-                alert('Please enter a quantity for at least one item.');
+            if (cart.length === 0) {
+                alert('Your order is empty. Please add at least one item.');
                 return;
             }
 
             let emailBody = 'New Web Order Submission:\n\n';
-            orderItems.forEach(item => {
+            cart.forEach(item => {
                 emailBody += `${item.name}: ${item.quantity} cases\n`;
             });
 
             alert('Order Submitted!\n\nA sales rep will contact you shortly to confirm.\n\n' + emailBody);
             
-            // Reset all input fields
-            quantityInputs.forEach(input => input.value = '');
+            cart = [];
+            renderCart();
         }
 
-        // --- TEST FUNCTIONS FOR CART LOGIC ---
-        let testCart = [];
-        function testAddToCart(id, name, price, quantity) {
-            const existingItem = testCart.find(item => item.id === id);
+        function addToCart(id, name, price, quantity) {
+            const existingItem = cart.find(item => item.id === id);
             if (existingItem) {
                 existingItem.quantity += quantity;
             } else {
-                testCart.push({ id, name, price, quantity });
+                cart.push({ id, name, price, quantity });
             }
-            console.log('Test Cart updated:', testCart);
-            alert(`Added ${quantity} of ${name}. Test Cart now has ${testCart.length} unique items.`);
+            renderCart();
+        }
+
+        function renderCart() {
+            const cartItemsUl = document.getElementById('cartItems');
+            const emptyCartMsg = document.getElementById('emptyCartMsg');
+            let cartHTML = '';
+            let total = 0;
+
+            if (cart.length === 0) {
+                emptyCartMsg.style.display = 'block';
+                cartItemsUl.innerHTML = ''; 
+            } else {
+                emptyCartMsg.style.display = 'none';
+            }
+
+            cart.forEach(item => {
+                const itemTotal = item.quantity * item.price;
+                total += itemTotal;
+                // We sanitize the name here to prevent HTML issues
+                const safeItemName = escapeHTML(item.name);
+                cartHTML += `
+                    <li>
+                        <div class="cart-item-details">
+                            <span class="item-name">${safeItemName}</span>
+                            <div class="item-price">${item.quantity} x $${item.price.toFixed(2)}</div>
+                        </div>
+                        <button class="remove-item-btn" onclick="handleRemoveFromCart('${item.id}')">&times;</button>
+                    </li>
+                `;
+            });
+
+            cartItemsUl.innerHTML = cartHTML;
+            document.getElementById('cartTotal').innerText = `Total: $${total.toFixed(2)}`;
         }
 
     </script>
