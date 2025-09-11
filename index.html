@@ -154,13 +154,14 @@
     </div>
 
     <script>
-        // --- JAVASCRIPT FOR DYNAMIC SHOPPING CART ---
+        // --- NEW, MORE ROBUST JAVASCRIPT LOGIC ---
         
         let cart = []; // This array will hold the items in the order
 
         document.addEventListener('DOMContentLoaded', function() {
             const campaignFileURL = 'campaign.json?v=' + new Date().getTime();
             fetchProducts(campaignFileURL);
+            addEventListeners();
         });
 
         async function fetchProducts(url) {
@@ -183,6 +184,7 @@
             let productHTML = '';
 
             products.forEach(product => {
+                // We now add "data-" attributes to the button to store the product info securely
                 productHTML += `
                     <div class="product-card">
                         <div class="product-image">
@@ -196,7 +198,12 @@
                             </div>
                             <div class="product-actions">
                                 <input type="number" id="qty-${product.ProductID_col}" min="1" placeholder="Qty">
-                                <button onclick="addToCart('${product.ProductID_col}', '${product.ProductName_col.replace(/'/g, "\\'")}', ${product.SpecialPrice_col})">+ Add to Order</button>
+                                <button class="addToCartBtn" 
+                                        data-product-id="${product.ProductID_col}" 
+                                        data-product-name="${product.ProductName_col}" 
+                                        data-product-price="${product.SpecialPrice_col}">
+                                    + Add to Order
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -205,23 +212,57 @@
             productListDiv.innerHTML = productHTML;
         }
 
-        function addToCart(id, name, price) {
-            const quantityInput = document.getElementById(`qty-${id}`);
-            const quantity = parseInt(quantityInput.value);
+        // We now use a single, smart event listener
+        function addEventListeners() {
+            const productListDiv = document.getElementById('productList');
+            
+            // This listener waits for a click anywhere in the product list
+            productListDiv.addEventListener('click', function(event) {
+                // It checks if the thing that was clicked is an "Add to Order" button
+                if (event.target && event.target.classList.contains('addToCartBtn')) {
+                    const button = event.target;
+                    const id = button.dataset.productId;
+                    const name = button.dataset.productName;
+                    const price = parseFloat(button.dataset.productPrice);
+                    
+                    const quantityInput = document.getElementById(`qty-${id}`);
+                    const quantity = parseInt(quantityInput.value);
 
-            if (isNaN(quantity) || quantity <= 0) {
-                alert('Please enter a valid quantity.');
-                return;
-            }
+                    if (isNaN(quantity) || quantity <= 0) {
+                        alert('Please enter a valid quantity.');
+                        return;
+                    }
+                    
+                    addToCart(id, name, price, quantity);
+                    quantityInput.value = ''; // Clear input after adding
+                }
+            });
 
+            document.getElementById('submitOrderBtn').addEventListener('click', function() {
+                if (cart.length === 0) {
+                    alert('Your order is empty. Please add at least one item.');
+                    return;
+                }
+
+                let emailBody = 'New Web Order Submission:\n\n';
+                cart.forEach(item => {
+                    emailBody += `${item.name}: ${item.quantity} cases\n`;
+                });
+
+                alert('Order Submitted!\n\nA sales rep will contact you shortly to confirm.\n\n' + emailBody);
+                
+                cart = [];
+                renderCart();
+            });
+        }
+
+        function addToCart(id, name, price, quantity) {
             const existingItem = cart.find(item => item.id === id);
             if (existingItem) {
                 existingItem.quantity += quantity;
             } else {
                 cart.push({ id, name, price, quantity });
             }
-            
-            quantityInput.value = ''; // Clear input after adding
             renderCart();
         }
 
@@ -233,6 +274,7 @@
 
             if (cart.length === 0) {
                 emptyCartMsg.style.display = 'block';
+                cartItemsUl.innerHTML = ''; // Clear previous items
             } else {
                 emptyCartMsg.style.display = 'none';
             }
@@ -252,25 +294,8 @@
             document.getElementById('cartTotal').innerText = `Total: $${total.toFixed(2)}`;
         }
 
-        document.getElementById('submitOrderBtn').addEventListener('click', function() {
-            if (cart.length === 0) {
-                alert('Your order is empty. Please add at least one item.');
-                return;
-            }
-
-            let emailBody = 'New Web Order Submission:\n\n';
-            cart.forEach(item => {
-                emailBody += `${item.name}: ${item.quantity} cases\n`;
-            });
-
-            // For this demo, we will show an alert. In the final version, this would send the email.
-            alert('Order Submitted!\n\nA sales rep will contact you shortly to confirm.\n\n' + emailBody);
-            
-            // Clear the cart and re-render
-            cart = [];
-            renderCart();
-        });
     </script>
 </body>
 </html>
+
 
