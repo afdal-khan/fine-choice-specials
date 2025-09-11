@@ -170,10 +170,17 @@
     </div>
 
     <script>
-        // --- FINAL, ROBUST JAVASCRIPT LOGIC (v10 - Simple & Reliable Cart) ---
+        // --- DEFINITIVE, ROBUST JAVASCRIPT LOGIC (v12) ---
         
         let loadedProducts = []; 
         let cart = [];
+
+        // Helper function to sanitize text to prevent HTML injection and character issues
+        function escapeHTML(str) {
+            const p = document.createElement('p');
+            p.textContent = str;
+            return p.innerHTML;
+        }
 
         document.addEventListener('DOMContentLoaded', function() {
             const campaignFileURL = 'campaign.json?v=' + new Date().getTime();
@@ -202,15 +209,15 @@
             let productHTML = '';
 
             products.forEach(product => {
-                // The button now calls a function directly, passing its unique ID.
-                // This is the simplest and most reliable method.
+                const safeProductName = escapeHTML(product.ProductName_col);
+
                 productHTML += `
                     <div class="product-card">
                         <div class="product-image">
-                            <img src="https://placehold.co/80x80/f87171/ffffff?text=Chicken" alt="${product.ProductName_col}">
+                            <img src="https://placehold.co/80x80/f87171/ffffff?text=Chicken" alt="${safeProductName}">
                         </div>
                         <div class="product-details">
-                            <h3>${product.ProductName_col}</h3>
+                            <h3>${safeProductName}</h3>
                             <div class="price-container">
                                 <span class="old-price">$${parseFloat(product.OriginalPrice_col).toFixed(2)}</span>
                                 <span class="new-price">$${parseFloat(product.SpecialPrice_col).toFixed(2)} / case</span>
@@ -284,7 +291,7 @@
 
             if (cart.length === 0) {
                 emptyCartMsg.style.display = 'block';
-                cartItemsUl.innerHTML = ''; // Clear the list
+                cartItemsUl.innerHTML = ''; 
             } else {
                 emptyCartMsg.style.display = 'none';
             }
@@ -292,11 +299,12 @@
             cart.forEach(item => {
                 const itemTotal = item.quantity * item.price;
                 total += itemTotal;
-                // Add the remove button to each cart item
+                // We sanitize the name here to prevent HTML issues
+                const safeItemName = escapeHTML(item.name);
                 cartHTML += `
                     <li>
                         <div class="cart-item-details">
-                            <span class="item-name">${item.name}</span>
+                            <span class="item-name">${safeItemName}</span>
                             <div class="item-price">${item.quantity} x $${item.price.toFixed(2)}</div>
                         </div>
                         <button class="remove-item-btn" onclick="handleRemoveFromCart('${item.id}')">&times;</button>
@@ -311,4 +319,3 @@
     </script>
 </body>
 </html>
-
