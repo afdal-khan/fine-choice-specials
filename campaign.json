@@ -1,20 +1,20 @@
 [
     {
-        "OriginalPrice_col": 57.87,
-        "ProductID_col": "542ac4d2-4184-f011-b4cb-000d3a3b4c7e",
-        "ProductName_col": "BREAST BONELESS Skinless Chunks 10kg  Bulk (KG)",
+        "OriginalPrice_col": 51.81,
+        "ProductID_col": "4b2ac4d2-4184-f011-b4cb-000d3a3b4c7e",
+        "ProductName_col": "BREAST 1/2 Valu Pak (KG)",
         "SpecialPrice_col": 0
     },
     {
-        "OriginalPrice_col": 57.87,
-        "ProductID_col": "572ac4d2-4184-f011-b4cb-000d3a3b4c7e",
-        "ProductName_col": "BREAST TENDERLOINS Skinless (KG)",
+        "OriginalPrice_col": 26.25,
+        "ProductID_col": "562ac4d2-4184-f011-b4cb-000d3a3b4c7e",
+        "ProductName_col": "BREAST TENDERLOINS Skinless  (TP)",
         "SpecialPrice_col": 0
     },
     {
-        "OriginalPrice_col": 57.87,
-        "ProductID_col": "582ac4d2-4184-f011-b4cb-000d3a3b4c7e",
-        "ProductName_col": "BREAST TENDERLOINS Skinless 10kgs Bulk  (KG)",
+        "OriginalPrice_col": 32.74,
+        "ProductID_col": "5c2ac4d2-4184-f011-b4cb-000d3a3b4c7e",
+        "ProductName_col": "CALYPSO PAK (KG)",
         "SpecialPrice_col": 0
     }
 ]
