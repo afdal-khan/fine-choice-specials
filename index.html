@@ -134,7 +134,7 @@
 
     <div class="header">
         <img src="FCMLogo.png" alt="Fine Choice Meats Logo">
-        <h1>Weekly Specials Final</h1>
+        <h1>Weekly Specials</h1>
     </div>
 
     <div class="container">
@@ -153,12 +153,21 @@
         </div>
     </div>
 
-
     <script>
-        // --- FINAL, ROBUST JAVASCRIPT LOGIC (v4 - Direct Listeners) ---
+        // --- FINAL, ROBUST JAVASCRIPT LOGIC (v5 - Escaped HTML) ---
         
-        let loadedProducts = []; // This will hold the clean product data from the server
-        let cart = []; // This array will hold the items in the order
+        let loadedProducts = []; 
+        let cart = [];
+
+        // Helper function to escape HTML special characters to prevent bugs
+        function escapeHTML(str) {
+            if (typeof str !== 'string') return '';
+            return str.replace(/&/g, '&amp;')
+                      .replace(/</g, '&lt;')
+                      .replace(/>/g, '&gt;')
+                      .replace(/"/g, '&quot;')
+                      .replace(/'/g, '&#039;');
+        }
 
         document.addEventListener('DOMContentLoaded', function() {
             const campaignFileURL = 'campaign.json?v=' + new Date().getTime();
@@ -171,7 +180,7 @@
                 const response = await fetch(url);
                 if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`);
                 const products = await response.json();
-                loadedProducts = products; // Store the clean data in our global variable
+                loadedProducts = products;
                 displayProducts(products);
             } catch (error) {
                 console.error('Failed to load campaign data:', error);
@@ -187,14 +196,17 @@
             let productHTML = '';
 
             products.forEach(product => {
-                // The button now ONLY stores the unique ID. This is much safer.
+                // *** THIS IS THE FIX ***
+                // We create a "safe" version of the product name before putting it in the HTML
+                const safeProductName = escapeHTML(product.ProductName_col);
+
                 productHTML += `
                     <div class="product-card">
                         <div class="product-image">
-                            <img src="https://placehold.co/80x80/f87171/ffffff?text=Chicken" alt="${product.ProductName_col}">
+                            <img src="https://placehold.co/80x80/f87171/ffffff?text=Chicken" alt="${safeProductName}">
                         </div>
                         <div class="product-details">
-                            <h3>${product.ProductName_col}</h3>
+                            <h3>${safeProductName}</h3>
                             <div class="price-container">
                                 <span class="old-price">$${parseFloat(product.OriginalPrice_col).toFixed(2)}</span>
                                 <span class="new-price">$${parseFloat(product.SpecialPrice_col).toFixed(2)} / case</span>
@@ -210,29 +222,19 @@
                 `;
             });
             productListDiv.innerHTML = productHTML;
-            addAddToCartListeners(); // Call this AFTER the products are on the page
+            addAddToCartListeners();
         }
 
-        // THIS IS THE NEW, MORE ROBUST FUNCTION
         function addAddToCartListeners() {
-            // Find all the "Add to Order" buttons that now exist on the page
             const buttons = document.querySelectorAll('.addToCartBtn');
-            
-            // Loop through each button and give it its own personal click listener
             buttons.forEach(button => {
                 button.addEventListener('click', function() {
-                    const id = this.dataset.productId; // 'this' refers to the button that was clicked
-                    
+                    const id = this.dataset.productId;
                     const product = loadedProducts.find(p => p.ProductID_col === id);
-                    
-                    if (!product) {
-                        console.error('Product not found in loadedProducts array!');
-                        return;
-                    }
+                    if (!product) return;
 
                     const name = product.ProductName_col;
                     const price = parseFloat(product.SpecialPrice_col);
-                    
                     const quantityInput = document.getElementById(`qty-${id}`);
                     const quantity = parseInt(quantityInput.value);
 
@@ -292,7 +294,7 @@
                 total += itemTotal;
                 cartHTML += `
                     <li>
-                        <span>${item.name} (x${item.quantity})</span>
+                        <span>${escapeHTML(item.name)} (x${item.quantity})</span>
                         <span>$${itemTotal.toFixed(2)}</span>
                     </li>
                 `;
@@ -305,10 +307,4 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
 
