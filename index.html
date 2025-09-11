@@ -16,6 +16,9 @@
             max-width: 1200px;
             margin: 20px auto;
             padding: 0 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
         }
         .header {
             width: 100%;
@@ -33,11 +36,6 @@
             font-weight: 600;
             color: #42526e;
             margin: 0;
-        }
-        .main-content {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 30px;
         }
         .products-section {
             flex: 2;
@@ -78,29 +76,26 @@
         .price-container { display: flex; align-items: baseline; gap: 8px; }
         .old-price { text-decoration: line-through; color: #7a869a; }
         .new-price { font-weight: 600; color: #de350b; }
-        .quantity-input {
+        .product-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
             margin-top: 10px;
         }
-        .quantity-input input {
-            width: 80px;
+        .product-actions input {
+            width: 60px;
             padding: 8px;
             border-radius: 4px;
             border: 1px solid #dfe1e6;
-            text-align: center;
         }
-        .review-order-btn-container {
-            text-align: center;
-            margin-top: 20px;
-        }
-        .review-order-btn {
+        .product-actions button {
             background-color: #0052cc;
             color: white;
             border: none;
-            border-radius: 6px;
-            padding: 15px 30px;
+            border-radius: 4px;
+            padding: 8px 12px;
             cursor: pointer;
-            font-size: 1.2em;
-            font-weight: 600;
+            font-weight: 500;
         }
         .order-summary-section h2 {
             margin-top: 0;
@@ -111,8 +106,18 @@
         #cartItems li {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             padding: 10px 0;
             border-bottom: 1px solid #f4f5f7;
+        }
+        .cart-item-details { flex-grow: 1; }
+        .remove-item-btn {
+            background: none;
+            border: none;
+            color: #de350b;
+            cursor: pointer;
+            font-size: 1.2em;
+            padding: 5px;
         }
         #cartTotal {
             margin-top: 20px;
@@ -131,7 +136,6 @@
             font-size: 1.1em;
             cursor: pointer;
             margin-top: 20px;
-            display: none; /* Hidden by default */
         }
         #loadingMessage, #errorMessage { text-align: center; padding: 40px; }
     </style>
@@ -144,29 +148,23 @@
     </div>
 
     <div class="container">
-        <div class="main-content">
-            <div class="products-section" id="productList">
-                <p id="loadingMessage">Loading specials...</p>
-                <p id="errorMessage" style="display: none; color: red;"></p>
-                <!-- Products will be loaded here -->
-                <div class="review-order-btn-container" id="reviewBtnContainer" style="display: none;">
-                    <button class="review-order-btn" id="reviewOrderBtn">Review My Order</button>
-                </div>
-            </div>
+        <div class="products-section" id="productList">
+            <p id="loadingMessage">Loading specials...</p>
+            <p id="errorMessage" style="display: none; color: red;"></p>
+        </div>
 
-            <div class="order-summary-section">
-                <h2>Your Order</h2>
-                <ul id="cartItems">
-                    <li id="emptyCartMsg">Enter quantities on the left and click "Review My Order".</li>
-                </ul>
-                <div id="cartTotal">Total: $0.00</div>
-                <button id="submitOrderBtn">Submit Order</button>
-            </div>
+        <div class="order-summary-section">
+            <h2>Your Order</h2>
+            <ul id="cartItems">
+                <li id="emptyCartMsg">Your order is empty.</li>
+            </ul>
+            <div id="cartTotal">Total: $0.00</div>
+            <button id="submitOrderBtn">Submit Order</button>
         </div>
     </div>
 
     <script>
-        // --- FINAL, ROBUST JAVASCRIPT LOGIC (v6 - Simplified Model) ---
+        // --- FINAL, ROBUST JAVASCRIPT LOGIC (v7 - Add/Remove Cart Model) ---
         
         let loadedProducts = []; 
         let cart = [];
@@ -174,6 +172,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const campaignFileURL = 'campaign.json?v=' + new Date().getTime();
             fetchProducts(campaignFileURL);
+            document.getElementById('submitOrderBtn').addEventListener('click', submitOrderHandler);
         });
 
         async function fetchProducts(url) {
@@ -197,6 +196,8 @@
             let productHTML = '';
 
             products.forEach(product => {
+                // The button now calls a function directly, passing its unique ID.
+                // This is the simplest and most reliable method.
                 productHTML += `
                     <div class="product-card">
                         <div class="product-image">
@@ -208,56 +209,43 @@
                                 <span class="old-price">$${parseFloat(product.OriginalPrice_col).toFixed(2)}</span>
                                 <span class="new-price">$${parseFloat(product.SpecialPrice_col).toFixed(2)} / case</span>
                             </div>
-                            <div class="quantity-input">
-                                <input type="number" class="product-quantity-input" data-product-id="${product.ProductID_col}" min="0" placeholder="Qty">
+                            <div class="product-actions">
+                                <input type="number" id="qty-${product.ProductID_col}" min="1" placeholder="Qty">
+                                <button onclick="handleAddToCart('${product.ProductID_col}')">
+                                    + Add to Order
+                                </button>
                             </div>
                         </div>
                     </div>
                 `;
             });
-            // We add the product HTML first, then add the review button container after it
-            productListDiv.innerHTML = productHTML + document.getElementById('reviewBtnContainer').outerHTML;
-            document.getElementById('reviewBtnContainer').style.display = 'block'; // Make the button visible
-            addEventListeners();
+            productListDiv.innerHTML = productHTML;
         }
 
-        function addEventListeners() {
-            document.getElementById('reviewOrderBtn').addEventListener('click', reviewOrderHandler);
-            document.getElementById('submitOrderBtn').addEventListener('click', submitOrderHandler);
-        }
+        function handleAddToCart(productId) {
+            const product = loadedProducts.find(p => p.ProductID_col === productId);
+            if (!product) return;
 
-        function reviewOrderHandler() {
-            cart = []; // Clear the cart before recalculating
-            const quantityInputs = document.querySelectorAll('.product-quantity-input');
+            const quantityInput = document.getElementById(`qty-${productId}`);
+            const quantity = parseInt(quantityInput.value);
 
-            quantityInputs.forEach(input => {
-                const quantity = parseInt(input.value);
-                if (quantity > 0) {
-                    const id = input.dataset.productId;
-                    const product = loadedProducts.find(p => p.ProductID_col === id);
-                    if (product) {
-                        cart.push({
-                            id: id,
-                            name: product.ProductName_col,
-                            price: parseFloat(product.SpecialPrice_col),
-                            quantity: quantity
-                        });
-                    }
-                }
-            });
-            
-            if (cart.length === 0) {
-                alert('Please enter a quantity for at least one item to review your order.');
+            if (isNaN(quantity) || quantity <= 0) {
+                alert('Please enter a valid quantity.');
                 return;
             }
-
-            renderCart();
-            document.getElementById('submitOrderBtn').style.display = 'block'; // Show the final submit button
+            
+            addToCart(product.ProductID_col, product.ProductName_col, parseFloat(product.SpecialPrice_col), quantity);
+            quantityInput.value = ''; // Clear input after adding
         }
-        
+
+        function handleRemoveFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            renderCart();
+        }
+
         function submitOrderHandler() {
             if (cart.length === 0) {
-                alert('Your order is empty. Please review your order first.');
+                alert('Your order is empty. Please add at least one item.');
                 return;
             }
 
@@ -268,11 +256,18 @@
 
             alert('Order Submitted!\n\nA sales rep will contact you shortly to confirm.\n\n' + emailBody);
             
-            // Reset the page
             cart = [];
-            document.querySelectorAll('.product-quantity-input').forEach(input => input.value = '');
             renderCart();
-            document.getElementById('submitOrderBtn').style.display = 'none';
+        }
+
+        function addToCart(id, name, price, quantity) {
+            const existingItem = cart.find(item => item.id === id);
+            if (existingItem) {
+                existingItem.quantity += quantity;
+            } else {
+                cart.push({ id, name, price, quantity });
+            }
+            renderCart();
         }
 
         function renderCart() {
@@ -291,10 +286,14 @@
             cart.forEach(item => {
                 const itemTotal = item.quantity * item.price;
                 total += itemTotal;
+                // Add the remove button to each cart item
                 cartHTML += `
                     <li>
-                        <span>${item.name} (x${item.quantity})</span>
-                        <span>$${itemTotal.toFixed(2)}</span>
+                        <div class="cart-item-details">
+                            <span>${item.name} (x${item.quantity})</span><br>
+                            <small>$${itemTotal.toFixed(2)}</small>
+                        </div>
+                        <button class="remove-item-btn" onclick="handleRemoveFromCart('${item.id}')">&times;</button>
                     </li>
                 `;
             });
