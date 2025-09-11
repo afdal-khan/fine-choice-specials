@@ -144,6 +144,70 @@
             margin-top: 20px;
         }
         #loadingMessage, #errorMessage { text-align: center; padding: 40px; }
+        
+        /* --- Custom Modal Styles --- */
+        #modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: none; /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0; /* Start invisible for transition */
+            transition: opacity 0.3s ease;
+        }
+
+        #modal-overlay.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        #custom-modal {
+            background: #fff;
+            padding: 25px 30px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            max-width: 400px;
+            width: 90%;
+            transform: scale(0.9); /* Start slightly smaller for transition */
+            transition: transform 0.3s ease;
+        }
+
+        #modal-overlay.show #custom-modal {
+            transform: scale(1);
+        }
+
+        #custom-modal h2 {
+            margin-top: 0;
+            color: #172b4d;
+        }
+
+        #custom-modal p {
+            margin-bottom: 25px;
+            color: #42526e;
+            line-height: 1.5;
+        }
+
+        #closeModalBtn {
+            background-color: #0065ff;
+            color: white;
+            font-weight: bold;
+            padding: 12px 30px;
+            border-radius: 6px;
+            border: none;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        #closeModalBtn:hover {
+            background-color: #0052cc;
+        }
     </style>
 </head>
 <body>
@@ -168,13 +232,18 @@
         </div>
     </div>
 
+    <div id="modal-overlay">
+        <div id="custom-modal">
+            <h2>Order Submitted! ✅</h2>
+            <p>A sales rep will call you shortly to confirm your order.</p>
+            <button id="closeModalBtn">OK</button>
+        </div>
+    </div>
+
     <script>
-        // --- DEFINITIVE, ROBUST JAVASCRIPT LOGIC (v14) ---
-        
         let loadedProducts = []; 
         let cart = [];
 
-        // Helper function to sanitize text to prevent HTML issues
         function escapeHTML(str) {
             const p = document.createElement('p');
             p.textContent = str;
@@ -185,7 +254,17 @@
             const campaignFileURL = 'campaign.json?v=' + new Date().getTime();
             fetchProducts(campaignFileURL);
             document.getElementById('submitOrderBtn').addEventListener('click', submitOrderHandler);
-            renderCart(); // Call once on load to show the empty message
+            renderCart(); 
+
+            // *** CHANGE 1: Add event listeners for the modal ***
+            const modalOverlay = document.getElementById('modal-overlay');
+            document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+            modalOverlay.addEventListener('click', function(event) {
+                // Close modal only if the dark overlay itself is clicked
+                if (event.target === modalOverlay) {
+                    closeModal();
+                }
+            });
         });
 
         async function fetchProducts(url) {
@@ -207,10 +286,8 @@
             const productListDiv = document.getElementById('productList');
             document.getElementById('loadingMessage').style.display = 'none';
             let productHTML = '';
-
             products.forEach(product => {
                 const safeProductName = escapeHTML(product.ProductName_col);
-
                 productHTML += `
                     <div class="product-card">
                         <div class="product-image">
@@ -224,9 +301,7 @@
                             </div>
                             <div class="product-actions">
                                 <input type="number" id="qty-${product.ProductID_col}" min="1" placeholder="Qty">
-                                <button onclick="handleAddToCart('${product.ProductID_col}')">
-                                    + Add to Order
-                                </button>
+                                <button onclick="handleAddToCart('${product.ProductID_col}')">+ Add to Order</button>
                             </div>
                         </div>
                     </div>
@@ -238,17 +313,14 @@
         function handleAddToCart(productId) {
             const product = loadedProducts.find(p => p.ProductID_col === productId);
             if (!product) return;
-
             const quantityInput = document.getElementById(`qty-${productId}`);
             const quantity = parseInt(quantityInput.value);
-
             if (isNaN(quantity) || quantity <= 0) {
                 alert('Please enter a valid quantity.');
                 return;
             }
-            
             addToCart(product.ProductID_col, product.ProductName_col, parseFloat(product.SpecialPrice_col), quantity);
-            quantityInput.value = ''; // Clear input after adding
+            quantityInput.value = '';
         }
 
         function handleRemoveFromCart(productId) {
@@ -261,16 +333,8 @@
                 alert('Your order is empty. Please add at least one item.');
                 return;
             }
-
-            let emailBody = 'New Web Order Submission:\n\n';
-            cart.forEach(item => {
-                emailBody += `${item.name}: ${item.quantity} cases\n`;
-            });
-
-            alert('Order Submitted!\n\nA sales rep will contact you shortly to confirm.\n\n' + emailBody);
-            
-            cart = [];
-            renderCart();
+            // Instead of the old alert, we now show the modal
+            document.getElementById('modal-overlay').classList.add('show');
         }
 
         function addToCart(id, name, price, quantity) {
@@ -286,15 +350,11 @@
         function renderCart() {
             const cartItemsUl = document.getElementById('cartItems');
             let total = 0;
-
-            // If the cart is empty, show the message and stop.
             if (cart.length === 0) {
                 cartItemsUl.innerHTML = '<li>Your order is empty.</li>';
                 document.getElementById('cartTotal').innerText = 'Total: $0.00';
-                return; // Exit the function early
+                return;
             }
-
-            // If the cart has items, build the list.
             let cartHTML = '';
             cart.forEach(item => {
                 const itemTotal = item.quantity * item.price;
@@ -310,11 +370,18 @@
                     </li>
                 `;
             });
-
             cartItemsUl.innerHTML = cartHTML;
             document.getElementById('cartTotal').innerText = `Total: $${total.toFixed(2)}`;
         }
 
+        // *** CHANGE 2: Create a function to close the modal ***
+        function closeModal() {
+            document.getElementById('modal-overlay').classList.remove('show');
+            // *** CHANGE 3: Move the cart clearing logic here ***
+            // This ensures the cart only clears AFTER the user closes the pop-up.
+            cart = [];
+            renderCart();
+        }
     </script>
 </body>
 </html>
