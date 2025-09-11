@@ -3,167 +3,172 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weekly Specials</title>
+    <title>Weekly Specials - Fine Choice Meats</title>
     <style>
-        /* --- Basic Styling --- */
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f8f9fa;
-            color: #333;
+            background-color: #f4f5f7;
+            color: #172b4d;
         }
         .container {
-            max-width: 900px;
+            max-width: 1200px;
             margin: 20px auto;
             padding: 0 20px;
-        }
-        /* --- Header Styling --- */
-        .header {
-            text-align: center;
-            padding: 20px 0;
-            border-bottom: 1px solid #dee2e6;
-            margin-bottom: 30px;
-        }
-        .header h1 {
-            font-size: 2em;
-            font-weight: 600;
-            color: #c00; /* Red color */
-        }
-        .header p {
-            font-size: 1.2em;
-            color: #6c757d;
-        }
-        /* --- Product Card Styling --- */
-        .product-card {
             display: flex;
             flex-wrap: wrap;
-            align-items: center;
-            margin-bottom: 20px;
-            padding: 20px;
-            background-color: #ffffff;
-            border: 1px solid #e9ecef;
-            border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            gap: 30px;
         }
-        .product-image {
-            flex: 0 0 150px;
-            margin-right: 20px;
+        .header {
+            width: 100%;
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #dfe1e6;
+            margin-bottom: 20px;
+        }
+        .header img {
+            max-height: 60px;
+            margin-bottom: 10px;
+        }
+        .header h1 {
+            font-size: 1.5em;
+            font-weight: 600;
+            color: #42526e;
+            margin: 0;
+        }
+        .products-section {
+            flex: 2;
+            min-width: 300px;
+        }
+        .order-summary-section {
+            flex: 1;
+            min-width: 300px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            align-self: flex-start; /* Sticks to the top */
+        }
+        .product-card {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 15px;
+            background-color: #ffffff;
+            border: 1px solid #dfe1e6;
+            border-radius: 8px;
         }
         .product-image img {
-            width: 100%;
-            height: auto;
-            border-radius: 8px;
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-right: 15px;
         }
         .product-details {
-            flex: 1;
-            min-width: 250px;
+            flex-grow: 1;
         }
         .product-details h3 {
-            margin: 0 0 10px 0;
-            font-size: 1.4em;
-            font-weight: 600;
-        }
-        .price-container {
-            display: flex;
-            align-items: baseline;
-            gap: 12px;
-            margin-bottom: 15px;
-        }
-        .old-price {
-            text-decoration: line-through;
-            color: #adb5bd;
+            margin: 0 0 5px 0;
             font-size: 1.1em;
         }
-        .new-price {
-            font-size: 1.8em;
-            font-weight: 700;
-            color: #dc3545;
+        .price-container { display: flex; align-items: baseline; gap: 8px; }
+        .old-price { text-decoration: line-through; color: #7a869a; }
+        .new-price { font-weight: 600; color: #de350b; }
+        .product-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
         }
-        .quantity-input label {
-            display: block;
-            margin-bottom: 5px;
+        .product-actions input {
+            width: 60px;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #dfe1e6;
+        }
+        .product-actions button {
+            background-color: #0052cc;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 12px;
+            cursor: pointer;
             font-weight: 500;
         }
-        .quantity-input input {
-            width: 100px;
-            padding: 10px;
-            font-size: 1em;
-            border: 1px solid #ced4da;
-            border-radius: 8px;
+        .order-summary-section h2 {
+            margin-top: 0;
+            border-bottom: 1px solid #dfe1e6;
+            padding-bottom: 10px;
         }
-        /* --- Form Submission Styling --- */
-        .submission-section {
-            text-align: center;
-            margin-top: 40px;
+        #cartItems { list-style-type: none; padding: 0; margin: 0; }
+        #cartItems li {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f4f5f7;
         }
-        .submission-section button {
-            background-color: #c00; /* Red color */
+        #cartTotal {
+            margin-top: 20px;
+            text-align: right;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        #submitOrderBtn {
+            width: 100%;
+            background-color: #0065ff;
             color: white;
             font-weight: bold;
-            padding: 16px 48px;
-            border-radius: 8px;
+            padding: 15px;
+            border-radius: 6px;
             border: none;
-            font-size: 1.2em;
+            font-size: 1.1em;
             cursor: pointer;
-            transition: background-color 0.2s;
+            margin-top: 20px;
         }
-        .submission-section button:hover {
-            background-color: #a00;
-        }
-        /* --- Loading and Error Styling --- */
-        #loadingMessage, #errorMessage {
-            text-align: center;
-            font-size: 1.2em;
-            padding: 40px;
-        }
+        #loadingMessage, #errorMessage { text-align: center; padding: 40px; }
     </style>
 </head>
 <body>
 
+    <div class="header">
+        <img src="https://i.imgur.com/your-logo-id.png" alt="Fine Choice Meats Logo">
+        <h1>Weekly Specials</h1>
+    </div>
+
     <div class="container">
-        <div class="header">
-            <h1>Fine Choice Meats</h1>
-            <p id="campaignSubtitle">Weekly Specials</p>
+        <div class="products-section" id="productList">
+            <p id="loadingMessage">Loading specials...</p>
+            <p id="errorMessage" style="display: none; color: red;"></p>
         </div>
 
-        <!-- This is where the product list will be dynamically inserted by JavaScript -->
-        <form id="orderForm">
-            <div id="productList">
-                <!-- Loading message will show initially -->
-                <p id="loadingMessage">Loading specials...</p>
-                <p id="errorMessage" style="display: none; color: red;"></p>
-            </div>
-
-            <div class="submission-section">
-                <button type="submit">Submit Order</button>
-            </div>
-        </form>
+        <div class="order-summary-section">
+            <h2>Your Order</h2>
+            <ul id="cartItems">
+                <li id="emptyCartMsg">Your order is empty.</li>
+            </ul>
+            <div id="cartTotal">Total: $0.00</div>
+            <button id="submitOrderBtn">Submit Order</button>
+        </div>
     </div>
 
     <script>
-        // --- THIS IS THE JAVASCRIPT THAT BRINGS THE PAGE TO LIFE ---
+        // --- JAVASCRIPT FOR DYNAMIC SHOPPING CART ---
+        
+        let cart = []; // This array will hold the items in the order
 
         document.addEventListener('DOMContentLoaded', function() {
-            // ** CRITICAL STEP **
-            // We add a unique timestamp to the end of the URL to prevent the browser from caching the old file.
             const campaignFileURL = 'campaign.json?v=' + new Date().getTime();
-
             fetchProducts(campaignFileURL);
         });
 
-        // Function to fetch the JSON data from the server
         async function fetchProducts(url) {
             try {
                 const response = await fetch(url);
-
-                if (!response.ok) {
-                    throw new Error(`Error fetching data: ${response.statusText}`);
-                }
-
+                if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`);
                 const products = await response.json();
                 displayProducts(products);
-
             } catch (error) {
                 console.error('Failed to load campaign data:', error);
                 document.getElementById('loadingMessage').style.display = 'none';
@@ -172,62 +177,99 @@
             }
         }
 
-        // Function to take the product data and build the HTML on the page
         function displayProducts(products) {
             const productListDiv = document.getElementById('productList');
-            document.getElementById('loadingMessage').style.display = 'none'; // Hide loading message
+            document.getElementById('loadingMessage').style.display = 'none';
             let productHTML = '';
 
             products.forEach(product => {
                 productHTML += `
                     <div class="product-card">
                         <div class="product-image">
-                            <img src="https://placehold.co/150x150/f87171/ffffff?text=Product" alt="${product.ProductName_col}">
+                            <img src="https://placehold.co/80x80/f87171/ffffff?text=Chicken" alt="${product.ProductName_col}">
                         </div>
                         <div class="product-details">
                             <h3>${product.ProductName_col}</h3>
                             <div class="price-container">
                                 <span class="old-price">$${parseFloat(product.OriginalPrice_col).toFixed(2)}</span>
-                                <span class="new-price">$${parseFloat(product.SpecialPrice_col).toFixed(2)}</span>
+                                <span class="new-price">$${parseFloat(product.SpecialPrice_col).toFixed(2)} / case</span>
                             </div>
-                            <div class="quantity-input">
-                                <label for="qty-${product.ProductID_col}">Quantity (cases)</label>
-                                <input type="number" id="qty-${product.ProductID_col}" name="${product.ProductName_col}" min="0" placeholder="e.g., 10">
+                            <div class="product-actions">
+                                <input type="number" id="qty-${product.ProductID_col}" min="1" placeholder="Qty">
+                                <button onclick="addToCart('${product.ProductID_col}', '${product.ProductName_col.replace(/'/g, "\\'")}', ${product.SpecialPrice_col})">+ Add to Order</button>
                             </div>
                         </div>
                     </div>
                 `;
             });
-
             productListDiv.innerHTML = productHTML;
         }
 
-        // Function to handle the form submission
-        document.getElementById('orderForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent the form from actually submitting
-            
-            const formData = new FormData(event.target);
-            let emailBody = 'New Web Order Submission:\n\n';
-            let hasItems = false;
+        function addToCart(id, name, price) {
+            const quantityInput = document.getElementById(`qty-${id}`);
+            const quantity = parseInt(quantityInput.value);
 
-            for (let [name, value] of formData.entries()) {
-                if (value && parseInt(value) > 0) {
-                    emailBody += `${name}: ${value} cases\n`;
-                    hasItems = true;
-                }
+            if (isNaN(quantity) || quantity <= 0) {
+                alert('Please enter a valid quantity.');
+                return;
             }
 
-            if (hasItems) {
-                // In a real scenario, this would send an email. For this demo, we will show an alert.
-                alert('Order Submitted!\n\n' + emailBody + '\nA sales rep will contact you shortly.');
-                event.target.reset(); // Clear the form
+            const existingItem = cart.find(item => item.id === id);
+            if (existingItem) {
+                existingItem.quantity += quantity;
             } else {
-                alert('Please enter a quantity for at least one item.');
+                cart.push({ id, name, price, quantity });
             }
+            
+            quantityInput.value = ''; // Clear input after adding
+            renderCart();
+        }
+
+        function renderCart() {
+            const cartItemsUl = document.getElementById('cartItems');
+            const emptyCartMsg = document.getElementById('emptyCartMsg');
+            let cartHTML = '';
+            let total = 0;
+
+            if (cart.length === 0) {
+                emptyCartMsg.style.display = 'block';
+            } else {
+                emptyCartMsg.style.display = 'none';
+            }
+
+            cart.forEach(item => {
+                const itemTotal = item.quantity * item.price;
+                total += itemTotal;
+                cartHTML += `
+                    <li>
+                        <span>${item.name} (x${item.quantity})</span>
+                        <span>$${itemTotal.toFixed(2)}</span>
+                    </li>
+                `;
+            });
+
+            cartItemsUl.innerHTML = cartHTML;
+            document.getElementById('cartTotal').innerText = `Total: $${total.toFixed(2)}`;
+        }
+
+        document.getElementById('submitOrderBtn').addEventListener('click', function() {
+            if (cart.length === 0) {
+                alert('Your order is empty. Please add at least one item.');
+                return;
+            }
+
+            let emailBody = 'New Web Order Submission:\n\n';
+            cart.forEach(item => {
+                emailBody += `${item.name}: ${item.quantity} cases\n`;
+            });
+
+            // For this demo, we will show an alert. In the final version, this would send the email.
+            alert('Order Submitted!\n\nA sales rep will contact you shortly to confirm.\n\n' + emailBody);
+            
+            // Clear the cart and re-render
+            cart = [];
+            renderCart();
         });
     </script>
 </body>
 </html>
-
-
-
