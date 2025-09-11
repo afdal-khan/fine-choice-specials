@@ -1,20 +1,32 @@
 [
     {
-        "OriginalPrice_col": 51.81,
-        "ProductID_col": "4b2ac4d2-4184-f011-b4cb-000d3a3b4c7e",
-        "ProductName_col": "BREAST 1/2 Valu Pak (KG)",
-        "SpecialPrice_col": 0
+        "OriginalPrice_col": 77.75,
+        "ProductID_col": "4c2ac4d2-4184-f011-b4cb-000d3a3b4c7e",
+        "ProductName_col": "BREAST 1/2 Valu Pak(TP)",
+        "SpecialPrice_col": 65
     },
     {
-        "OriginalPrice_col": 26.25,
-        "ProductID_col": "562ac4d2-4184-f011-b4cb-000d3a3b4c7e",
-        "ProductName_col": "BREAST TENDERLOINS Skinless  (TP)",
-        "SpecialPrice_col": 0
+        "OriginalPrice_col": 10.99,
+        "ProductID_col": "4d2ac4d2-4184-f011-b4cb-000d3a3b4c7e",
+        "ProductName_col": "BREAST BONE & NECK Baglet (KG)",
+        "SpecialPrice_col": 10
     },
     {
-        "OriginalPrice_col": 32.74,
-        "ProductID_col": "5c2ac4d2-4184-f011-b4cb-000d3a3b4c7e",
-        "ProductName_col": "CALYPSO PAK (KG)",
-        "SpecialPrice_col": 0
+        "OriginalPrice_col": 9,
+        "ProductID_col": "4e2ac4d2-4184-f011-b4cb-000d3a3b4c7e",
+        "ProductName_col": "BREAST BONE Bulk (KG)",
+        "SpecialPrice_col": 2
+    },
+    {
+        "OriginalPrice_col": 78.37,
+        "ProductID_col": "4f2ac4d2-4184-f011-b4cb-000d3a3b4c7e",
+        "ProductName_col": "BREAST BONELESS Skinless (KG)",
+        "SpecialPrice_col": 55.5
+    },
+    {
+        "OriginalPrice_col": 35.55,
+        "ProductID_col": "502ac4d2-4184-f011-b4cb-000d3a3b4c7e",
+        "ProductName_col": "BREAST BONELESS Skinless (TP)",
+        "SpecialPrice_col": 21
     }
 ]
