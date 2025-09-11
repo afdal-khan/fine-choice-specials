@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weekly Specials - Fine Choice Meats</title>
+    <title>Weekly Specials TEST - Fine Choice Meats</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -153,16 +153,14 @@
         </div>
     </div>
 
-    <script>
-        // --- CORRECTED JAVASCRIPT LOGIC ---
+  <script>
+        // --- FINAL, ROBUST JAVASCRIPT LOGIC ---
         
         let cart = []; // This array will hold the items in the order
 
         document.addEventListener('DOMContentLoaded', function() {
             const campaignFileURL = 'campaign.json?v=' + new Date().getTime();
             fetchProducts(campaignFileURL);
-            // We only add the listener for the SUBMIT button here.
-            // The listeners for the product buttons are added AFTER they are created.
             document.getElementById('submitOrderBtn').addEventListener('click', submitOrderHandler);
         });
 
@@ -211,17 +209,19 @@
                 `;
             });
             productListDiv.innerHTML = productHTML;
-
-            // *** THIS IS THE FIX ***
-            // Now that the buttons exist on the page, we can add the event listener for them.
-            addAddToCartListeners();
+            addAddToCartListeners(); // Call this AFTER the products are on the page
         }
 
         function addAddToCartListeners() {
             const productListDiv = document.getElementById('productList');
+            
             productListDiv.addEventListener('click', function(event) {
-                if (event.target && event.target.classList.contains('addToCartBtn')) {
-                    const button = event.target;
+                // *** THIS IS THE FIX ***
+                // We look for the closest ancestor that is a button with the correct class.
+                const button = event.target.closest('.addToCartBtn');
+
+                // If a button was clicked (or something inside it), this will not be null.
+                if (button) {
                     const id = button.dataset.productId;
                     const name = button.dataset.productName;
                     const price = parseFloat(button.dataset.productPrice);
@@ -298,6 +298,7 @@
     </script>
 </body>
 </html>
+
 
 
 
