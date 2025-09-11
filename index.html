@@ -144,7 +144,7 @@
 
     <div class="header">
         <img src="logo.png" alt="Fine Choice Meats Logo">
-        <h1>Weekly Specials</h1>
+        <h1>Weekly Specials TEST</h1>
     </div>
 
     <div class="container">
@@ -164,10 +164,17 @@
     </div>
 
     <script>
-        // --- FINAL, ROBUST JAVASCRIPT LOGIC (v7 - Add/Remove Cart Model) ---
+        // --- FINAL, ROBUST JAVASCRIPT LOGIC (v8 - Sanitized HTML) ---
         
         let loadedProducts = []; 
         let cart = [];
+
+        // Helper function to sanitize text before inserting it into HTML
+        function escapeHTML(str) {
+            const p = document.createElement('p');
+            p.textContent = str;
+            return p.innerHTML;
+        }
 
         document.addEventListener('DOMContentLoaded', function() {
             const campaignFileURL = 'campaign.json?v=' + new Date().getTime();
@@ -196,15 +203,16 @@
             let productHTML = '';
 
             products.forEach(product => {
-                // The button now calls a function directly, passing its unique ID.
-                // This is the simplest and most reliable method.
+                // We now call our helper function to create a "safe" version of the name
+                const safeProductName = escapeHTML(product.ProductName_col);
+
                 productHTML += `
                     <div class="product-card">
                         <div class="product-image">
-                            <img src="https://placehold.co/80x80/f87171/ffffff?text=Chicken" alt="${product.ProductName_col}">
+                            <img src="https://placehold.co/80x80/f87171/ffffff?text=Chicken" alt="${safeProductName}">
                         </div>
                         <div class="product-details">
-                            <h3>${product.ProductName_col}</h3>
+                            <h3>${safeProductName}</h3>
                             <div class="price-container">
                                 <span class="old-price">$${parseFloat(product.OriginalPrice_col).toFixed(2)}</span>
                                 <span class="new-price">$${parseFloat(product.SpecialPrice_col).toFixed(2)} / case</span>
@@ -286,11 +294,12 @@
             cart.forEach(item => {
                 const itemTotal = item.quantity * item.price;
                 total += itemTotal;
-                // Add the remove button to each cart item
+                // We also sanitize the name here for safety
+                const safeItemName = escapeHTML(item.name);
                 cartHTML += `
                     <li>
                         <div class="cart-item-details">
-                            <span>${item.name} (x${item.quantity})</span><br>
+                            <span>${safeItemName} (x${item.quantity})</span><br>
                             <small>$${itemTotal.toFixed(2)}</small>
                         </div>
                         <button class="remove-item-btn" onclick="handleRemoveFromCart('${item.id}')">&times;</button>
