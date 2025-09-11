@@ -134,7 +134,7 @@
 
     <div class="header">
         <img src="FCMLogo.png" alt="Fine Choice Meats Logo">
-        <h1>Weekly Specials TEST</h1>
+        <h1>Weekly Specials</h1>
     </div>
 
     <div class="container">
@@ -153,9 +153,10 @@
         </div>
     </div>
 
-  <script>
-        // --- FINAL, ROBUST JAVASCRIPT LOGIC ---
+ <script>
+        // --- FINAL, ROBUST JAVASCRIPT LOGIC (v3) ---
         
+        let loadedProducts = []; // This will hold the clean product data from the server
         let cart = []; // This array will hold the items in the order
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -169,6 +170,7 @@
                 const response = await fetch(url);
                 if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`);
                 const products = await response.json();
+                loadedProducts = products; // Store the clean data in our global variable
                 displayProducts(products);
             } catch (error) {
                 console.error('Failed to load campaign data:', error);
@@ -184,6 +186,7 @@
             let productHTML = '';
 
             products.forEach(product => {
+                // The button now ONLY stores the unique ID. This is much safer.
                 productHTML += `
                     <div class="product-card">
                         <div class="product-image">
@@ -197,10 +200,7 @@
                             </div>
                             <div class="product-actions">
                                 <input type="number" id="qty-${product.ProductID_col}" min="1" placeholder="Qty">
-                                <button class="addToCartBtn" 
-                                        data-product-id="${product.ProductID_col}" 
-                                        data-product-name="${product.ProductName_col}" 
-                                        data-product-price="${product.SpecialPrice_col}">
+                                <button class="addToCartBtn" data-product-id="${product.ProductID_col}">
                                     + Add to Order
                                 </button>
                             </div>
@@ -216,15 +216,20 @@
             const productListDiv = document.getElementById('productList');
             
             productListDiv.addEventListener('click', function(event) {
-                // *** THIS IS THE FIX ***
-                // We look for the closest ancestor that is a button with the correct class.
                 const button = event.target.closest('.addToCartBtn');
-
-                // If a button was clicked (or something inside it), this will not be null.
                 if (button) {
                     const id = button.dataset.productId;
-                    const name = button.dataset.productName;
-                    const price = parseFloat(button.dataset.productPrice);
+                    
+                    // Look up the full product details from our clean global array
+                    const product = loadedProducts.find(p => p.ProductID_col === id);
+                    
+                    if (!product) {
+                        console.error('Product not found in loadedProducts array!');
+                        return;
+                    }
+
+                    const name = product.ProductName_col;
+                    const price = parseFloat(product.SpecialPrice_col);
                     
                     const quantityInput = document.getElementById(`qty-${id}`);
                     const quantity = parseInt(quantityInput.value);
@@ -298,6 +303,7 @@
     </script>
 </body>
 </html>
+
 
 
 
