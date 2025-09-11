@@ -162,8 +162,7 @@
         <div class="order-summary-section">
             <h2>Your Order</h2>
             <ul id="cartItems">
-                <li id="emptyCartMsg">Your order is empty.</li>
-            </ul>
+                </ul>
             <div id="cartTotal">Total: $0.00</div>
             <button id="submitOrderBtn">Submit Order</button>
         </div>
@@ -186,6 +185,7 @@
             const campaignFileURL = 'campaign.json?v=' + new Date().getTime();
             fetchProducts(campaignFileURL);
             document.getElementById('submitOrderBtn').addEventListener('click', submitOrderHandler);
+            renderCart(); // Call once on load to show the empty message
         });
 
         async function fetchProducts(url) {
@@ -285,21 +285,20 @@
 
         function renderCart() {
             const cartItemsUl = document.getElementById('cartItems');
-            const emptyCartMsg = document.getElementById('emptyCartMsg');
-            let cartHTML = '';
             let total = 0;
 
+            // If the cart is empty, show the message and stop.
             if (cart.length === 0) {
-                emptyCartMsg.style.display = 'block';
-                cartItemsUl.innerHTML = ''; 
-            } else {
-                emptyCartMsg.style.display = 'none';
+                cartItemsUl.innerHTML = '<li>Your order is empty.</li>';
+                document.getElementById('cartTotal').innerText = 'Total: $0.00';
+                return; // Exit the function early
             }
 
+            // If the cart has items, build the list.
+            let cartHTML = '';
             cart.forEach(item => {
                 const itemTotal = item.quantity * item.price;
                 total += itemTotal;
-                // We sanitize the name here to prevent HTML issues
                 const safeItemName = escapeHTML(item.name);
                 cartHTML += `
                     <li>
@@ -319,4 +318,3 @@
     </script>
 </body>
 </html>
-
