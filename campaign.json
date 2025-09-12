@@ -1,20 +1,20 @@
 [
     {
-        "OriginalPrice_col": 42.07,
-        "ProductID_col": "fd87bcd8-4184-f011-b4cb-000d3a3b4c7e",
-        "ProductName_col": "RF CUT UP 1/8 Valu Pak (KG)",
-        "SpecialPrice_col": 35
+        "OriginalPrice_col": 32.74,
+        "ProductID_col": "0f88bcd8-4184-f011-b4cb-000d3a3b4c7e",
+        "ProductName_col": "RF MENU 1/4 (KG)",
+        "SpecialPrice_col": 25
     },
     {
-        "OriginalPrice_col": 51.81,
-        "ProductID_col": "4b2ac4d2-4184-f011-b4cb-000d3a3b4c7e",
-        "ProductName_col": "BREAST 1/2 Valu Pak (KG)",
-        "SpecialPrice_col": 45.5
+        "OriginalPrice_col": 57.87,
+        "ProductID_col": "532ac4d2-4184-f011-b4cb-000d3a3b4c7e",
+        "ProductName_col": "BREAST BONELESS Skinless Chunks (KG)",
+        "SpecialPrice_col": 49.99
     },
     {
-        "OriginalPrice_col": 78.37,
-        "ProductID_col": "512ac4d2-4184-f011-b4cb-000d3a3b4c7e",
-        "ProductName_col": "BREAST BONELESS Skinless Bulk (KG)",
-        "SpecialPrice_col": 70
+        "OriginalPrice_col": 57.98,
+        "ProductID_col": "2440bede-4184-f011-b4cb-000d3a3b4c7e",
+        "ProductName_col": "THIGHS BONELESS Skinless (KG)",
+        "SpecialPrice_col": 50
     }
 ]
