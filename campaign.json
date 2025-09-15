@@ -1,20 +1,20 @@
 [
     {
-        "OriginalPrice_col": 24.5,
-        "ProductID_col": "42ca4410-ef63-f011-bec3-000d3a36c148",
-        "ProductName_col": "WHOLE LEGS  (TP)",
-        "SpecialPrice_col": 19.99
+        "OriginalPrice_col": 78.37,
+        "ProductID_col": "4f2ac4d2-4184-f011-b4cb-000d3a3b4c7e",
+        "ProductName_col": "BREAST BONELESS Skinless (KG)",
+        "SpecialPrice_col": 70
     },
     {
-        "OriginalPrice_col": 23.5,
-        "ProductID_col": "482ac4d2-4184-f011-b4cb-000d3a3b4c7e",
-        "ProductName_col": "BREAST 1/2  (TP)",
-        "SpecialPrice_col": 15
+        "OriginalPrice_col": 57.98,
+        "ProductID_col": "2440bede-4184-f011-b4cb-000d3a3b4c7e",
+        "ProductName_col": "THIGHS BONELESS Skinless (KG)",
+        "SpecialPrice_col": 49.99
     },
     {
-        "OriginalPrice_col": 51.81,
-        "ProductID_col": "4a2ac4d2-4184-f011-b4cb-000d3a3b4c7e",
-        "ProductName_col": "BREAST 1/2 Bulk (KG)",
-        "SpecialPrice_col": 45.5
+        "OriginalPrice_col": 33.62,
+        "ProductID_col": "1388bcd8-4184-f011-b4cb-000d3a3b4c7e",
+        "ProductName_col": "RF MENU 1/8 (KG)",
+        "SpecialPrice_col": 25
     }
 ]
