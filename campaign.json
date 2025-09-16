@@ -1,20 +1,20 @@
 [
     {
-        "OriginalPrice_col": 78.37,
-        "ProductID_col": "4f2ac4d2-4184-f011-b4cb-000d3a3b4c7e",
-        "ProductName_col": "BREAST BONELESS Skinless (KG)",
-        "SpecialPrice_col": 70
-    },
-    {
-        "OriginalPrice_col": 57.98,
-        "ProductID_col": "2440bede-4184-f011-b4cb-000d3a3b4c7e",
+        "OriginalPrice_col": 18,
+        "ProductID_col": "0967e6fb-ee63-f011-bec3-000d3a36c148",
         "ProductName_col": "THIGHS BONELESS Skinless (KG)",
-        "SpecialPrice_col": 49.99
+        "SpecialPrice_col": 15
     },
     {
-        "OriginalPrice_col": 33.62,
-        "ProductID_col": "1388bcd8-4184-f011-b4cb-000d3a3b4c7e",
-        "ProductName_col": "RF MENU 1/8 (KG)",
-        "SpecialPrice_col": 25
+        "OriginalPrice_col": 51.81,
+        "ProductID_col": "492ac4d2-4184-f011-b4cb-000d3a3b4c7e",
+        "ProductName_col": "BREAST 1/2 (KG)",
+        "SpecialPrice_col": 45.95
+    },
+    {
+        "OriginalPrice_col": 54.01,
+        "ProductID_col": "472ac4d2-4184-f011-b4cb-000d3a3b4c7e",
+        "ProductName_col": "BREAST & WING 1/4 Bulk (KG)",
+        "SpecialPrice_col": 44.44
     }
 ]
