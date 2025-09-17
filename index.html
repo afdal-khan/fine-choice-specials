@@ -279,6 +279,19 @@
     }
     // --- NEW CODE ENDS HERE ---
 });
+
+        // --- Add these two functions to your script ---
+
+function showModal() {
+    document.getElementById('modal-overlay').classList.add('show');
+}
+
+function closeModal() {
+    document.getElementById('modal-overlay').classList.remove('show');
+    // This is where the cart is cleared after the user sees the success message
+    cart = [];
+    renderCart();
+}
         async function fetchProducts(url) {
             try {
                 const response = await fetch(url);
@@ -431,6 +444,7 @@
     </script>
 </body>
 </html>
+
 
 
 
