@@ -1,20 +1,20 @@
 [
     {
-        "OriginalPrice_col": 18,
-        "ProductID_col": "0967e6fb-ee63-f011-bec3-000d3a36c148",
-        "ProductName_col": "THIGHS BONELESS Skinless (KG)",
-        "SpecialPrice_col": 15
+        "OriginalPrice_col": 45.52,
+        "ProductID_col": "5e2ac4d2-4184-f011-b4cb-000d3a3b4c7e",
+        "ProductName_col": "DRUMSTICKS (KG)",
+        "SpecialPrice_col": 12
     },
     {
-        "OriginalPrice_col": 51.81,
-        "ProductID_col": "492ac4d2-4184-f011-b4cb-000d3a3b4c7e",
-        "ProductName_col": "BREAST 1/2 (KG)",
-        "SpecialPrice_col": 45.95
+        "OriginalPrice_col": 45.52,
+        "ProductID_col": "612ac4d2-4184-f011-b4cb-000d3a3b4c7e",
+        "ProductName_col": "DRUMSTICKS Valu Pak (KG)",
+        "SpecialPrice_col": 12
     },
     {
-        "OriginalPrice_col": 54.01,
-        "ProductID_col": "472ac4d2-4184-f011-b4cb-000d3a3b4c7e",
-        "ProductName_col": "BREAST & WING 1/4 Bulk (KG)",
-        "SpecialPrice_col": 44.44
+        "OriginalPrice_col": 187.4,
+        "ProductID_col": "602ac4d2-4184-f011-b4cb-000d3a3b4c7e",
+        "ProductName_col": "DRUMSTICKS SPECIAL Bulk (CS)",
+        "SpecialPrice_col": 12
     }
 ]
