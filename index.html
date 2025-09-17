@@ -328,14 +328,48 @@
             renderCart();
         }
 
-        function submitOrderHandler() {
-            if (cart.length === 0) {
-                alert('Your order is empty. Please add at least one item.');
-                return;
-            }
-            // Instead of the old alert, we now show the modal
-            document.getElementById('modal-overlay').classList.add('show');
+      async function submitOrderHandler() {
+    // 1. Check if the cart is empty (same as before)
+    if (cart.length === 0) {
+        alert('Your order is empty. Please add at least one item.');
+        return;
+    }
+
+    // 2. Define the URL for your new Power Automate Flow
+    //    This is the URL from your "When an HTTP request is received" trigger.
+    const flowURL = 'https://25befb64a0afe7c391c1421dc7d9db.05.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/a269433be32946748294e20944d8be21/triggers/manual/paths/invoke/?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=alUE-VTO0itVNRc5K-oz9xunq2cPOdN-F-XxmB0SlUc';
+
+    // 3. Package the customer's unique ID and their cart into a JSON object
+    const orderPayload = {
+        customerUID: customerUID, // This is the ID we got from the URL when the page loaded
+        cartItems: cart
+    };
+
+    // 4. Try to send the data to Power Automate
+    try {
+        const response = await fetch(flowURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(orderPayload),
+        });
+
+        // 5. Check if the submission was successful
+        if (response.ok) {
+            // If successful, show the nice pop-up to the user
+            showModal(); 
+        } else {
+            // If the flow has an error, inform the user
+            alert('There was a problem submitting your order. Please contact sales directly.');
+            console.error('Flow Error:', await response.json());
         }
+    } catch (error) {
+        // If there's a network error, inform the user
+        console.error('Network Error:', error);
+        alert('A network error occurred. Please check your connection and try again.');
+    }
+}
 
         function addToCart(id, name, price, quantity) {
             const existingItem = cart.find(item => item.id === id);
@@ -385,4 +419,5 @@
     </script>
 </body>
 </html>
+
 
