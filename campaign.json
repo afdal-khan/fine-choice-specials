@@ -1,20 +1,20 @@
 [
     {
-        "OriginalPrice_col": 45.52,
-        "ProductID_col": "5e2ac4d2-4184-f011-b4cb-000d3a3b4c7e",
-        "ProductName_col": "DRUMSTICKS (KG)",
-        "SpecialPrice_col": 12
+        "OriginalPrice_col": 78.37,
+        "ProductID_col": "4f2ac4d2-4184-f011-b4cb-000d3a3b4c7e",
+        "ProductName_col": "BREAST BONELESS Skinless (KG)",
+        "SpecialPrice_col": 70
     },
     {
-        "OriginalPrice_col": 45.52,
-        "ProductID_col": "612ac4d2-4184-f011-b4cb-000d3a3b4c7e",
-        "ProductName_col": "DRUMSTICKS Valu Pak (KG)",
-        "SpecialPrice_col": 12
+        "OriginalPrice_col": 41.78,
+        "ProductID_col": "2b40bede-4184-f011-b4cb-000d3a3b4c7e",
+        "ProductName_col": "WHOLE LEGS Bulk (KG)",
+        "SpecialPrice_col": 35.95
     },
     {
-        "OriginalPrice_col": 187.4,
-        "ProductID_col": "602ac4d2-4184-f011-b4cb-000d3a3b4c7e",
-        "ProductName_col": "DRUMSTICKS SPECIAL Bulk (CS)",
-        "SpecialPrice_col": 12
+        "OriginalPrice_col": 77.75,
+        "ProductID_col": "3342bede-4184-f011-b4cb-000d3a3b4c7e",
+        "ProductName_col": "WINGS Valu Pak (TP)",
+        "SpecialPrice_col": 70.99
     }
 ]
