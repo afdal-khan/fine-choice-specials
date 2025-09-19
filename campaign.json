@@ -1,20 +1,20 @@
 [
     {
-        "OriginalPrice_col": 78.37,
-        "ProductID_col": "4f2ac4d2-4184-f011-b4cb-000d3a3b4c7e",
-        "ProductName_col": "BREAST BONELESS Skinless (KG)",
-        "SpecialPrice_col": 70
+        "OriginalPrice_col": 50.71,
+        "ProductID_col": "ed87bcd8-4184-f011-b4cb-000d3a3b4c7e",
+        "ProductName_col": "MINCED CHICKEN (KG)",
+        "SpecialPrice_col": 42
+    },
+    {
+        "OriginalPrice_col": 44.5,
+        "ProductID_col": "f687bcd8-4184-f011-b4cb-000d3a3b4c7e",
+        "ProductName_col": "RF BIG 1/4 (HD) Printed Bag",
+        "SpecialPrice_col": 39.99
     },
     {
         "OriginalPrice_col": 41.78,
-        "ProductID_col": "2b40bede-4184-f011-b4cb-000d3a3b4c7e",
-        "ProductName_col": "WHOLE LEGS Bulk (KG)",
-        "SpecialPrice_col": 35.95
-    },
-    {
-        "OriginalPrice_col": 77.75,
-        "ProductID_col": "3342bede-4184-f011-b4cb-000d3a3b4c7e",
-        "ProductName_col": "WINGS Valu Pak (TP)",
-        "SpecialPrice_col": 70.99
+        "ProductID_col": "2a40bede-4184-f011-b4cb-000d3a3b4c7e",
+        "ProductName_col": "WHOLE LEGS (KG)",
+        "SpecialPrice_col": 35
     }
 ]
